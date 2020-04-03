@@ -48,6 +48,20 @@ C["7"] = `(${N[7]}+[])`
 C["8"] = `(${N[8]}+[])`
 C["9"] = `(${N[9]}+[])`
 
+// brackets
+
+C["["] = combIndex("[object Object]", 0)
+C["]"] = combIndex("[object Object]", 14)
+C["("] = newArray().constructor().toString().indexOf(14)
+C[")"] = newArray().constructor().toString().indexOf(15)
+C["{"] = newArray().constructor().toString().indexOf(17)
+C["}"] = newArray().constructor().toString().indexOf(33)
+C["<"] = emptyString().indexOf("italics").add("()").indexOf(0)
+C[">"] = emptyString().indexOf("italics").add("()").indexOf(2)
+
+// upper case
+
+// lower case
 
 C["a"] = combIndex("false", 1)
 C["b"] = combIndex("[object Object]", 2)
@@ -61,7 +75,7 @@ C["i"] = combIndex("undefined", 5)
 C["j"] = combIndex("[object Object]", 3)
 C["k"] = "'k'"
 C["l"] = combIndex("false", 2)
-C["m"] = getNumberRaw(0).constructor().toString().indexOf(11)
+C["m"] = zero().constructor().toString().indexOf(11)
 C["n"] = combIndex("undefined", 1)
 C["o"] = combIndex("[object Object]", 1)
 C["p"] = "'p'"
@@ -73,7 +87,7 @@ C["u"] = combIndex("true", 2)
 C["v"] = "'v'"
 C["w"] = "'w'"
 C["x"] = "'x'"
-C["y"] = returnValue("[]").constructor().toString().indexOf(13)
+C["y"] = newArray().constructor().toString().indexOf(13)
 C["z"] = "'z'"
 
 function getNumberValue(index) {
@@ -112,8 +126,9 @@ function returnValue(value) {
         toFunction: () => {
             return returnValue(returnValue("[]").indexOf("sort").constructor().value + `(${value})()`)
         },
-        execute: () => {
-            eval([]["sort"]["constructor"](value)())
+        add: (other) => { return returnValue(value + other) },
+        eval: () => {
+            console.log(eval(value))
         }
     }
 }
@@ -124,6 +139,11 @@ function getNumber(n) { return getNumberRaw(n).toString() }
 function getNumbers(n) { return getNumbersRaw(n); }
 function comb(c) { return returnValue(COMBINATIONS[c]) }
 function combIndex(c, i) { return comb(c).toString().indexOf(i) }
+
+function newArray() { return returnValue("[]") }
+function newObject() { return returnValue("{}") }
+function zero() { return returnValue("(+[])") }
+function emptyString() { return returnValue("([]+[])") }
 
 function generateString(input) {
     let out = ""
