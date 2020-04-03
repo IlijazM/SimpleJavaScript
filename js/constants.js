@@ -17,8 +17,7 @@ const COMBINATIONS = {
 
 // to string
 const TOSTRING = "+[]"
-
-comb = (name) => { return COMBINATIONS[name] + TOSTRING }
+const CONSTRUCTOR = "[({}+[])[+!+[]+!![]+!![]+!![]+!![]]+({}+[])[+!+[]]+([][+[]]+[])[+!+[]]+(![]+[])[+!+[]+!![]+!![]]+(!![]+[])[+[]]+(!![]+[])[+!+[]]+(!![]+[])[+!+[]+!![]]+({}+[])[+!+[]+!![]+!![]+!![]+!![]]+(!![]+[])[+[]]+({}+[])[+!+[]]+(!![]+[])[+!+[]]]"
 
 // numbers
 const N = [
@@ -33,9 +32,6 @@ const N = [
     "+!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]",
     "+!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]"
 ]
-
-index = (i) => { return N[i] }
-combIndex = (name, i) => { return `(${comb(name)})[${index(i)}]` }
 
 let C = {}
 
@@ -80,10 +76,38 @@ C["x"] = "'x'"
 C["y"] = "'y'"
 C["z"] = "'z'"
 
-/*
- * B:
- * origin: [object Object]
- */
+function getNumberValue(index) {
+    let out = ""
+    index = index + ""
+
+    if (index.length == 1) return C[index[0]] + TOSTRING
+
+    for (let i = 0; i < index.length; i++) {
+        if (i != 0) out += "+"
+        console.log(index[i]);
+        out += "(" + C[index[i]].value + TOSTRING + ")"
+    }
+    return out
+}
+
+function returnValue(value) {
+    return {
+        value: value,
+        inBrackets: () => { return returnValue(`(${value})`) },
+        inCurlyBrackets: () => { return returnValue(`{${value}}`) },
+        inSquareBrackets: () => { return returnValue(`[${value}]`) },
+        toString: () => { return returnValue(value + TOSTRING) },
+        indexOf: (i) => { return returnValue(`(${value})[${getNumberValue(i)}]`) },
+        constructor: (i) => { return returnValue(`(${value})${CONSTRUCTOR}`) }
+    }
+}
+
+function getNumberRaw(n) { return returnValue(N[n]) }
+function getNumbersRaw(n) { return returnValue(getNumberValue(n)) }
+function getNumber(n) { return getNumberRaw(n).toString() }
+function getNumbers(n) { return getNumbersRaw(n); }
+function comb(c) { return returnValue(COMBINATIONS[c]) }
+function combIndex(c, i) { return comb(c).toString().indexOf(i) }
 
 function generateString(input) {
     let out = ""
