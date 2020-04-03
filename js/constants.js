@@ -37,21 +37,47 @@ let C = {}
 
 // numbers
 
-C["0"] = `(${N[0]}+[])`
-C["1"] = `(${N[1]}+[])`
-C["2"] = `(${N[2]}+[])`
-C["3"] = `(${N[3]}+[])`
-C["4"] = `(${N[4]}+[])`
-C["5"] = `(${N[5]}+[])`
-C["6"] = `(${N[6]}+[])`
-C["7"] = `(${N[7]}+[])`
-C["8"] = `(${N[8]}+[])`
-C["9"] = `(${N[9]}+[])`
+C["0"] = getNumber(0).inBrackets()
+C["1"] = getNumber(1).inBrackets()
+C["2"] = getNumber(2).inBrackets()
+C["3"] = getNumber(3).inBrackets()
+C["4"] = getNumber(4).inBrackets()
+C["5"] = getNumber(5).inBrackets()
+C["6"] = getNumber(6).inBrackets()
+C["7"] = getNumber(7).inBrackets()
+C["8"] = getNumber(8).inBrackets()
+C["9"] = getNumber(9).inBrackets()
+
+// lower case
+
+C[" "] = combinationIndex("[object Object]", 7)
+C["a"] = combinationIndex("false", 1)
+C["b"] = combinationIndex("[object Object]", 2)
+C["c"] = combinationIndex("[object Object]", 5)
+C["d"] = combinationIndex("undefined", 8)
+C["e"] = combinationIndex("undefined", 3)
+C["f"] = combinationIndex("false", 0)
+C["g"] = "'g'"
+C["h"] = "'h'"
+C["i"] = combinationIndex("undefined", 5)
+C["j"] = combinationIndex("[object Object]", 3)
+C["l"] = combinationIndex("false", 2)
+C["m"] = zero().constructor().toString().indexOf(11)
+C["n"] = combinationIndex("undefined", 1)
+C["o"] = combinationIndex("[object Object]", 1)
+C["p"] = "'p'"
+C["q"] = "'q'"
+C["r"] = combinationIndex("true", 1)
+C["s"] = combinationIndex("false", 3)
+C["t"] = combinationIndex("true", 0)
+C["u"] = combinationIndex("true", 2)
+C["v"] = "'v'"
+C["y"] = newArray().constructor().toString().indexOf(13)
 
 // brackets
 
-C["["] = combIndex("[object Object]", 0)
-C["]"] = combIndex("[object Object]", 14)
+C["["] = combinationIndex("[object Object]", 0)
+C["]"] = combinationIndex("[object Object]", 14)
 C["("] = newArray().constructor().toString().indexOf(14)
 C[")"] = newArray().constructor().toString().indexOf(15)
 C["{"] = newArray().constructor().toString().indexOf(17)
@@ -61,34 +87,25 @@ C[">"] = emptyString().indexOf("italics").add("()").indexOf(2)
 
 // upper case
 
-// lower case
+C["A"] = newArray().constructor().toString().indexOf(9)
+C["N"] = combinationIndex("NaN", 0)
+C["O"] = newObject().constructor().toString().indexOf(9)
+C["S"] = emptyString().constructor().toString().indexOf(9)
 
-C["a"] = combIndex("false", 1)
-C["b"] = combIndex("[object Object]", 2)
-C["c"] = combIndex("[object Object]", 5)
-C["d"] = combIndex("undefined", 8)
-C["e"] = combIndex("undefined", 3)
-C["f"] = combIndex("false", 0)
-C["g"] = "'g'"
-C["h"] = "'h'"
-C["i"] = combIndex("undefined", 5)
-C["j"] = combIndex("[object Object]", 3)
-C["k"] = "'k'"
-C["l"] = combIndex("false", 2)
-C["m"] = zero().constructor().toString().indexOf(11)
-C["n"] = combIndex("undefined", 1)
-C["o"] = combIndex("[object Object]", 1)
-C["p"] = "'p'"
-C["q"] = "'q'"
-C["r"] = combIndex("true", 1)
-C["s"] = combIndex("false", 3)
-C["t"] = combIndex("true", 0)
-C["u"] = combIndex("true", 2)
-C["v"] = "'v'"
-C["w"] = "'w'"
-C["x"] = "'x'"
-C["y"] = newArray().constructor().toString().indexOf(13)
-C["z"] = "'z'"
+C["k"] = btoaFunction(19, 2)
+C["w"] = btoaFunction(3, 1)
+
+C["x"] = btoaFunction(101, 3)
+C["z"] = btoaFunction(30, 1)
+C["D"] = btoaFunction(40, 1)
+C["E"] = btoaFunction(11, 2)
+C["I"] = btoaFunction(12, 2)
+C["M"] = btoaFunction(0, 0)
+C["N"] = btoaFunction(4, 0)
+C["Q"] = btoaFunction(1, 1)
+C["T"] = btoaFunction(10, 1)
+C["U"] = btoaFunction(15, 2)
+C["Y"] = btoaFunction(16, 2)
 
 function getNumberValue(index) {
     let out = ""
@@ -114,36 +131,39 @@ function getNumberValue(index) {
     return out
 }
 
-function returnValue(value) {
+function toValue(value) {
     return {
         value: value,
-        inBrackets: () => { return returnValue(`(${value})`) },
-        inCurlyBrackets: () => { return returnValue(`{${value}}`) },
-        inSquareBrackets: () => { return returnValue(`[${value}]`) },
-        toString: () => { return returnValue(value + TOSTRING) },
-        indexOf: (i) => { return returnValue(`(${value})[${getNumberValue(i)}]`) },
-        constructor: (i) => { return returnValue(`(${value})${CONSTRUCTOR}`) },
+        inBrackets: () => { return toValue(`(${value})`) },
+        inCurlyBrackets: () => { return toValue(`{${value}}`) },
+        inSquareBrackets: () => { return toValue(`[${value}]`) },
+        toString: () => { return toValue(value + TOSTRING) },
+        indexOf: (i) => { return toValue(`(${value})[${getNumberValue(i)}]`) },
+        constructor: (i) => { return toValue(`(${value})${CONSTRUCTOR}`) },
         toFunction: () => {
-            return returnValue(returnValue("[]").indexOf("sort").constructor().value + `(${value})()`)
+            return toValue(toValue("[]").indexOf("sort").constructor().value + `(${value})()`)
         },
-        add: (other) => { return returnValue(value + other) },
+        add: (other) => { return toValue(value + other) },
         eval: () => {
             console.log(eval(value))
         }
     }
 }
 
-function getNumberRaw(n) { return returnValue(N[n]) }
-function getNumbersRaw(n) { return returnValue(getNumberValue(n)) }
+function getNumberRaw(n) { return toValue(N[n]) }
+function getNumbersRaw(n) { return toValue(getNumberValue(n)) }
 function getNumber(n) { return getNumberRaw(n).toString() }
 function getNumbers(n) { return getNumbersRaw(n); }
-function comb(c) { return returnValue(COMBINATIONS[c]) }
-function combIndex(c, i) { return comb(c).toString().indexOf(i) }
+function combination(c) { return toValue(COMBINATIONS[c]).toString() }
+function combinationIndex(c, i) { return combination(c).toString().indexOf(i) }
 
-function newArray() { return returnValue("[]") }
-function newObject() { return returnValue("{}") }
-function zero() { return returnValue("(+[])") }
-function emptyString() { return returnValue("([]+[])") }
+function newArray() { return toValue("[]") }
+function newObject() { return toValue("{}") }
+function zero() { return toValue("(+[])") }
+function emptyString() { return toValue("([]+[])") }
+function newFunction(name) { return toValue(name).toFunction() }
+
+function btoaFunction(b, i) { return toValue(generateString(`return btoa(${b})`)).toFunction().toString().indexOf(i) }
 
 function generateString(input) {
     let out = ""
