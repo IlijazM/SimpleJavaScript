@@ -57,21 +57,20 @@ C["c"] = combinationIndex("[object Object]", 5)
 C["d"] = combinationIndex("undefined", 8)
 C["e"] = combinationIndex("undefined", 3)
 C["f"] = combinationIndex("false", 0)
-C["g"] = "'g'"
 C["h"] = "'h'"
 C["i"] = combinationIndex("undefined", 5)
 C["j"] = combinationIndex("[object Object]", 3)
+C["k"] = undefined
 C["l"] = combinationIndex("false", 2)
 C["m"] = zero().constructor().toString().indexAt(11)
 C["n"] = combinationIndex("undefined", 1)
 C["o"] = combinationIndex("[object Object]", 1)
-C["p"] = "'p'"
 C["q"] = "'q'"
 C["r"] = combinationIndex("true", 1)
 C["s"] = combinationIndex("false", 3)
 C["t"] = combinationIndex("true", 0)
 C["u"] = combinationIndex("true", 2)
-C["v"] = "'v'"
+C["v"] = newArray().indexAt("sort").toString().indexAt(23)
 C["y"] = newArray().constructor().toString().indexAt(13)
 
 // brackets
@@ -84,34 +83,30 @@ C["{"] = newArray().constructor().toString().indexAt(17)
 C["}"] = newArray().constructor().toString().indexAt(33)
 C["<"] = emptyString().indexAt("italics").add("()").indexAt(0)
 C[">"] = emptyString().indexAt("italics").add("()").indexAt(2)
+C["/"] = emptyString().indexAt("italics").add("()").indexAt(4)
+C["="] = emptyString().indexAt("fontcolor").add("()").toString().indexAt(11)
+C['"'] = emptyString().indexAt("fontcolor").add("()").toString().indexAt(12)
+C["+"] = newFunction(generateString("return 1e100")).toString().indexAt(2)
+C["."] = newFunction(generateString("return 1/2")).toString().indexAt(1)
+
+C["g"] = newFunction(generateString("return 1n.constructor")).toString().indexAt(11)
+C["p"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(14)
+C["x"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(13)
+
+C["?"] = newFunction(generateString("return /./.compile()")).toString().indexAt(2)
+C[":"] = newFunction(generateString("return /./.compile()")).toString().indexAt(3)
 
 // upper case
 
 C["A"] = newArray().constructor().toString().indexAt(9)
+C["B"] = toValue("![]").inBrackets().constructor().toString().indexAt(9)
+C["E"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(12)
+C["F"] = newArray().indexAt("sort").constructor().toString().indexAt(9)
+C["I"] = newFunction(generateString("return 1e1000")).toString().indexAt(0)
 C["N"] = combinationIndex("NaN", 0)
 C["O"] = newObject().constructor().toString().indexAt(9)
+C["R"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(9)
 C["S"] = emptyString().constructor().toString().indexAt(9)
-
-C["k"] = btoaFunction(19, 2)
-C["w"] = btoaFunction(3, 1)
-
-C["x"] = btoaFunction(101, 3)
-C["z"] = btoaFunction(30, 1)
-C["D"] = btoaFunction(40, 1)
-C["E"] = btoaFunction(11, 2)
-C["I"] = btoaFunction(12, 2)
-C["M"] = btoaFunction(0, 0)
-C["N"] = btoaFunction(4, 0)
-C["Q"] = btoaFunction(1, 1)
-C["T"] = btoaFunction(10, 1)
-C["U"] = btoaFunction(15, 2)
-C["Y"] = btoaFunction(16, 2)
-
-C["="] = btoaFunction(0, 3)
-C["/"] = emptyString().indexAt("italics").add("()").indexAt(4)
-
-// C["'"] = newFunction("'return atob()'")
-C["."] = newFunction(generateString("return 1/2")).toString().indexAt(1)
 
 function getNumberValue(index) {
     let out = ""
@@ -169,8 +164,6 @@ function zero() { return toValue("+[]") }
 function emptyString() { return toValue("[]+[]") }
 function newFunction(name) { return toValue(name).toFunction() }
 
-function btoaFunction(b, i) { return toValue(generateString(`return btoa(${b})`)).toFunction().toString().indexAt(i) }
-
 function forceChar(c) {
     c = c.charCodeAt(0)
     console.log(c)
@@ -186,7 +179,7 @@ function generateString(input) {
 
         let c = C[input[i]]
 
-        if (c == undefined) out += forceChar(input[i])
+        if (c == undefined) out += input[i]
         else out += c.value;
     }
 
