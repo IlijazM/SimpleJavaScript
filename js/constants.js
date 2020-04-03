@@ -61,7 +61,7 @@ C["i"] = combIndex("undefined", 5)
 C["j"] = combIndex("[object Object]", 3)
 C["k"] = "'k'"
 C["l"] = combIndex("false", 2)
-C["m"] = "'m'"
+C["m"] = getNumberRaw(0).constructor().toString().indexOf(11)
 C["n"] = combIndex("undefined", 1)
 C["o"] = combIndex("[object Object]", 1)
 C["p"] = "'p'"
@@ -73,19 +73,30 @@ C["u"] = combIndex("true", 2)
 C["v"] = "'v'"
 C["w"] = "'w'"
 C["x"] = "'x'"
-C["y"] = "'y'"
+C["y"] = returnValue("[]").constructor().toString().indexOf(13)
 C["z"] = "'z'"
 
 function getNumberValue(index) {
     let out = ""
     index = index + ""
 
-    if (index.length == 1) return C[index[0]] + TOSTRING
+    if (index.length == 1) {
+        if (!isNaN(parseInt(index[0]))) {
+            return N[parseInt(index[0])] + TOSTRING
+        } else {
+            return C[index[0]] + TOSTRING
+        }
+    }
+
 
     for (let i = 0; i < index.length; i++) {
         if (i != 0) out += "+"
-        console.log(index[i]);
-        out += "(" + C[index[i]].value + TOSTRING + ")"
+        if (!isNaN(parseInt(index[i]))) {
+            console.log(index[i]);
+            out += "(" + N[parseInt(index[i])] + TOSTRING + ")"
+        } else {
+            out += "(" + C[index[i]].value + TOSTRING + ")"
+        }
     }
     return out
 }
@@ -118,8 +129,7 @@ function generateString(input) {
         let c = C[input[i]]
 
         if (c == undefined) c = `"${input[i]}"`
-
-        out += c;
+        else out += c.value;
     }
 
     return out
