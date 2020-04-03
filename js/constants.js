@@ -92,7 +92,6 @@ function getNumberValue(index) {
     for (let i = 0; i < index.length; i++) {
         if (i != 0) out += "+"
         if (!isNaN(parseInt(index[i]))) {
-            console.log(index[i]);
             out += "(" + N[parseInt(index[i])] + TOSTRING + ")"
         } else {
             out += "(" + C[index[i]].value + TOSTRING + ")"
@@ -109,7 +108,13 @@ function returnValue(value) {
         inSquareBrackets: () => { return returnValue(`[${value}]`) },
         toString: () => { return returnValue(value + TOSTRING) },
         indexOf: (i) => { return returnValue(`(${value})[${getNumberValue(i)}]`) },
-        constructor: (i) => { return returnValue(`(${value})${CONSTRUCTOR}`) }
+        constructor: (i) => { return returnValue(`(${value})${CONSTRUCTOR}`) },
+        toFunction: () => {
+            return returnValue(returnValue("[]").indexOf("sort").constructor().value + `(${value})()`)
+        },
+        execute: () => {
+            eval([]["sort"]["constructor"](value)())
+        }
     }
 }
 
