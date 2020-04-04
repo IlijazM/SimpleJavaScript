@@ -22,6 +22,7 @@ body {
 .wrapper {
     width: 1000px;
     background: #252525;
+    padding: 2%;
 }
 
 h1 {
@@ -30,7 +31,6 @@ h1 {
 
 input,
 textarea {
-    height: 20px !important;
     font-size: 30px;
     background: #444;
     border: none;
