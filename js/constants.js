@@ -107,6 +107,10 @@ C["N"] = combinationIndex("NaN", 0)
 C["O"] = newObject().constructor().toString().indexAt(9)
 C["R"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(9)
 C["S"] = emptyString().constructor().toString().indexAt(9)
+C["U"] = newFunction(generateString("return toString(Object.create([]))")).indexAt(8)
+
+C["C"] = newFunction(generateString("return Object.entries(console)")).indexAt(10).indexAt(0).indexAt(5) // find it
+C["L"] = newFunction(generateString("return Object.entries(console)")).indexAt(19).indexAt(0).indexAt(4) // find it
 
 function getNumberValue(index) {
     let out = ""
