@@ -37,6 +37,8 @@ let C = {}
 
 // numbers
 
+C['#'] = toValue("##########")
+
 C["0"] = getNumber(0).inBrackets()
 C["1"] = getNumber(1).inBrackets()
 C["2"] = getNumber(2).inBrackets()
@@ -161,6 +163,28 @@ function toValue(value) {
         add: (other) => { return toValue(value + other) },
         eval: () => {
             console.log(eval(value))
+        },
+        copy: () => {
+            const el = document.createElement('textarea')
+            el.value = value.substring(1, value.length - 2)
+            document.body.appendChild(el)
+            el.select()
+            document.execCommand("copy")
+            document.body.removeChild(el)
+
+            console.log("copied to clipboard")
+        },
+        print: () => {
+            console.log(value)
+        },
+        download: (as) => {
+            console.log("downloading")
+            let blob = new Blob([value], { type: "text/plain" })
+            let url = window.URL.createObjectURL(blob)
+            const el = document.getElementById("download_link")
+            el.download = as
+            el.href = url
+            el.click()
         }
     }
 }
