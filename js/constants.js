@@ -57,20 +57,22 @@ C["c"] = combinationIndex("[object Object]", 5)
 C["d"] = combinationIndex("undefined", 8)
 C["e"] = combinationIndex("undefined", 3)
 C["f"] = combinationIndex("false", 0)
-C["h"] = "'h'"
 C["i"] = combinationIndex("undefined", 5)
 C["j"] = combinationIndex("[object Object]", 3)
 C["l"] = combinationIndex("false", 2)
 C["m"] = zero().constructor().toString().indexAt(11)
 C["n"] = combinationIndex("undefined", 1)
 C["o"] = combinationIndex("[object Object]", 1)
-C["q"] = "'q'"
 C["r"] = combinationIndex("true", 1)
 C["s"] = combinationIndex("false", 3)
 C["t"] = combinationIndex("true", 0)
 C["u"] = combinationIndex("true", 2)
 C["v"] = newArray().indexAt("sort").toString().indexAt(23)
 C["y"] = newArray().constructor().toString().indexAt(13)
+
+/*
+ * q w z
+ */
 
 // brackets
 
@@ -114,6 +116,11 @@ C["h"] = emptyString().indexAt("link").add("()").indexAt(3)
 C["C"] = newFunction("return Object.entries(console).find(value => /group.ollapsed/.test(value[0]))").indexAt(0).indexAt(5)
 C["L"] = newFunction("return Object.entries(Error)").toString().indexAt(10)
 C["T"] = newFunction("return Object.entries(Error)").toString().indexAt(5)
+
+/*
+ *  INCLUDED: A B C E F I L N O R S T U
+ *  EXCLUDED: D G H I J K M P Q V W X Y Z
+ */
 
 function getNumberValue(index) {
     let out = ""
@@ -177,7 +184,7 @@ function generateString(input) {
     let out = ""
 
     for (let i = 0; i < input.length; i++) {
-        if (i != 0) out += "+"
+        if (i != 0) out += '+'
 
         let c = C[input[i]]
 
@@ -186,4 +193,8 @@ function generateString(input) {
     }
 
     return out
+}
+
+function generateFunction(input) {
+    return newFunction(input).value
 }
