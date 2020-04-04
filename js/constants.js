@@ -60,7 +60,6 @@ C["f"] = combinationIndex("false", 0)
 C["h"] = "'h'"
 C["i"] = combinationIndex("undefined", 5)
 C["j"] = combinationIndex("[object Object]", 3)
-C["k"] = undefined
 C["l"] = combinationIndex("false", 2)
 C["m"] = zero().constructor().toString().indexAt(11)
 C["n"] = combinationIndex("undefined", 1)
@@ -86,31 +85,35 @@ C[">"] = emptyString().indexAt("italics").add("()").indexAt(2)
 C["/"] = emptyString().indexAt("italics").add("()").indexAt(4)
 C["="] = emptyString().indexAt("fontcolor").add("()").toString().indexAt(11)
 C['"'] = emptyString().indexAt("fontcolor").add("()").toString().indexAt(12)
-C["+"] = newFunction(generateString("return 1e100")).toString().indexAt(2)
-C["."] = newFunction(generateString("return 1/2")).toString().indexAt(1)
+C["+"] = newFunction("return 1e100").toString().indexAt(2)
+C["."] = newFunction("return 1/2").toString().indexAt(1)
 
-C["g"] = newFunction(generateString("return 1n.constructor")).toString().indexAt(11)
-C["p"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(14)
-C["x"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(13)
+C["g"] = newFunction("return 1n.constructor").toString().indexAt(11)
+C["p"] = newFunction("return /a/").constructor().toString().indexAt(14)
+C["x"] = newFunction("return /a/").constructor().toString().indexAt(13)
 
-C["?"] = newFunction(generateString("return /./.compile()")).toString().indexAt(2)
-C[":"] = newFunction(generateString("return /./.compile()")).toString().indexAt(3)
+C["?"] = newFunction("return /./.compile()").toString().indexAt(2)
+C[":"] = newFunction("return /./.compile()").toString().indexAt(3)
 
 // upper case
 
 C["A"] = newArray().constructor().toString().indexAt(9)
 C["B"] = toValue("![]").inBrackets().constructor().toString().indexAt(9)
-C["E"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(12)
+C["E"] = newFunction("return /a/").constructor().toString().indexAt(12)
 C["F"] = newArray().indexAt("sort").constructor().toString().indexAt(9)
-C["I"] = newFunction(generateString("return 1e1000")).toString().indexAt(0)
+C["I"] = newFunction("return 1e1000").toString().indexAt(0)
 C["N"] = combinationIndex("NaN", 0)
 C["O"] = newObject().constructor().toString().indexAt(9)
-C["R"] = newFunction(generateString("return /a/")).constructor().toString().indexAt(9)
+C["R"] = newFunction("return /a/").constructor().toString().indexAt(9)
 C["S"] = emptyString().constructor().toString().indexAt(9)
-C["U"] = newFunction(generateString("return toString(Object.create([]))")).indexAt(8)
+C["U"] = newFunction("return toString(Object.create([]))").indexAt(8)
 
-C["C"] = newFunction(generateString("return Object.entries(console)")).indexAt(10).indexAt(0).indexAt(5) // find it
-C["L"] = newFunction(generateString("return Object.entries(console)")).indexAt(19).indexAt(0).indexAt(4) // find it
+C["k"] = newFunction("return Object.entries(Error)").toString().indexAt(4)
+C["h"] = emptyString().indexAt("link").add("()").indexAt(3)
+
+C["C"] = newFunction("return Object.entries(console).find(value => /group.ollapsed/.test(value[0]))").indexAt(0).indexAt(5)
+C["L"] = newFunction("return Object.entries(Error)").toString().indexAt(10)
+C["T"] = newFunction("return Object.entries(Error)").toString().indexAt(5)
 
 function getNumberValue(index) {
     let out = ""
@@ -166,14 +169,9 @@ function newArray() { return toValue("[]") }
 function newObject() { return toValue("{}") }
 function zero() { return toValue("+[]") }
 function emptyString() { return toValue("[]+[]") }
-function newFunction(name) { return toValue(name).toFunction() }
+function newFunction(code) { return toValue(generateString(code)).toFunction() }
 
-function forceChar(c) {
-    c = c.charCodeAt(0)
-    console.log(c)
-
-    return c
-}
+function forceChar(c) { return newFunction(`return String.fromCharCode(${c.charCodeAt(0)})`) }
 
 function generateString(input) {
     let out = ""
@@ -183,7 +181,7 @@ function generateString(input) {
 
         let c = C[input[i]]
 
-        if (c == undefined) out += input[i]
+        if (c == undefined) out += forceChar(input[i]).value
         else out += c.value;
     }
 
